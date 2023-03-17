@@ -9,7 +9,8 @@ class OctoPrint(BaseSource):
     """
     OPTIONS = [
         (['--hostname'], {"required": True}),
-        (['--api-key'], {"required": True})
+        (['--api-key'], {"required": True}),
+        (['--by-time'], {"action": "store_true"}),
     ]
 
     def init(self):
@@ -19,8 +20,17 @@ class OctoPrint(BaseSource):
         url = f'http://{self.opts.hostname}/api/job'
         req = Request(url, headers={'X-Api-Key': self.opts.api_key})
         job = json.load(urlopen(req))
-        self.log(f"{job['state']} {job['progress']}")
-        completion = job.get('progress', {}).get('completion', 0.0) or 0.0
+        if self.opts.by_time:
+            print_time = job['progress'].get('printTime')
+            print_time_left = job['progress'].get('printTimeLeft')
+            if print_time is not None and print_time_left is not None:
+                completion = (print_time / (print_time + print_time_left)) * 100.0
+            else:
+                completion = 0
+            self.log(f"{job['state']} {completion:.1f}%")
+        else:
+            self.log(f"{job['state']} {job['progress']}")
+            completion = job.get('progress', {}).get('completion', 0.0) or 0.0
         state = {
             'meter': completion,
             'red': 0,
