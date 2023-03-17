@@ -34,4 +34,6 @@ currently include:
 * `CloudWatchAlarm`: Status of an AWS CloudWatch alarm
 * `CloudWatchLogs`: Retrieve a numerical value from CloudWatch Logs
 * `Pomodoro`: A simple Pomodoro timer for scheduling work and break periods
+* `Meetings`: Progress bar through your meetings
+* `Traeger`: Temperature probe data from Traeger WiFire grills
 
