@@ -11,10 +11,15 @@ class Traeger(BaseSource):
     """Temperature probe data from Traeger WiFire
     """
     OPTIONS = [
-        (['--username'], {"required": True}),
-        (['--password'], {"required": True}),
-        (['--start-temp'], {"required": True}),
-        (['--target-temp'], {"default": "PROBE_SET"}),
+        (['--username'], {"required": True,
+                          'help': 'Traeger account username'}),
+        (['--password'], {"required": True,
+                          'help': 'Traeger account password'}),
+        (['--start-temp'], {"required": True, 'metavar': 'T',
+                            'help': 'zero on meter is T degrees'}),
+        (['--target-temp'], {"default": "PROBE_SET", 'metavar': 'T',
+                             'help': ('full-scale on meter is T degrees, or if'
+                                      ' "PROBE_SET", the probe set point')}),
     ]
 
     def init(self):

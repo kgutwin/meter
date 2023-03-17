@@ -10,7 +10,8 @@ class OutsideTemp(BaseSource):
     """Ouside temperature from Open-Meteo.com
     """
     OPTIONS = [
-        (['--coords'], {"required": True}),
+        (['--coords'], {"required": True,
+                        'help': 'Current location as "latitude,longitude"'}),
     ]
 
     def init(self):

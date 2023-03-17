@@ -7,9 +7,12 @@ class Pomodoro(BaseSource):
     """Pomodoro timer
     """
     OPTIONS = [
-        (['--work-time'], {'type': int, 'default': 25}),
-        (['--break-time'], {'type': int, 'default': 5}),
-        (['--direction'], {'choices': ['up', 'down'], 'default': 'down'}),
+        (['--work-time'], {'type': int, 'default': 25, 'metavar': 'MINUTES',
+                           'help': 'work period is MINUTES long'}),
+        (['--break-time'], {'type': int, 'default': 5, 'metavar': 'MINUTES',
+                            'help': 'break period is MINUTES long'}),
+        (['--direction'], {'choices': ['up', 'down'], 'default': 'down',
+                           'help': 'if "down", meter moves from 100 to 0'}),
     ]
 
     def init(self):

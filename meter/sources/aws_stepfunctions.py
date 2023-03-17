@@ -7,10 +7,17 @@ sfn = boto3.client('stepfunctions')
 
 class SfnMapRun(BaseSource):
     """Step Functions Map Run status
+
+    Red light is bright if the run fails, or glows dimly if only a
+    small number of jobs have failed. Green light illuminates when the
+    run succeeds; blue light illuminates when the run is aborted.
+
     """
     OPTIONS = [
-        (['arn'], {"config_save": False}),
-        (['--known-failures'], {"config_save": False, 'type': int}),
+        (['arn'], {"config_save": False, 'help': 'Step Functions Map Run ARN'}),
+        (['--known-failures'],
+         {"config_save": False, 'type': int,
+          'help': 'reduce the number of failed jobs by this amount'}),
     ]
 
     def update(self, reported):

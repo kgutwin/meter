@@ -25,10 +25,15 @@ def find_key(k, d):
 
 class CloudWatchAlarm(BaseSource):
     """CloudWatch Alarm status
+
+    The meter will show the raw value of the alarm. When the alarm is
+    in state ALARM, the red light will illuminate.
+
     """
     OPTIONS = [
-        (['name'], {"config_save": False}),
-        (['--composite', '-c'], {"action": "store", "type": config.to_bool}),
+        (['name'], {"config_save": False, 'help': 'CloudWatch alarm name'}),
+        (['--composite', '-c'], {"action": "store", "type": config.to_bool,
+                                 'help': 'alarm type is composite'}),
     ]
 
     def update(self, reported):
@@ -72,16 +77,22 @@ class CloudWatchLogs(BaseSource):
     """CloudWatch Logs filter
 
     Provide a log group and log stream name, plus a regular expression
-    to extract the current value from the log stream. If the maximum
-    value is provided, the value from the log stream will be scaled
-    appropriately.
+    to extract the current value from the log stream. The regular
+    expression should have at least one matching group which matches a
+    numerical value. If the maximum value is provided, the value from
+    the log stream will be scaled appropriately. Providing a value for
+    the red, green, or blue regexes will, when matched in the log
+    stream, cause the respective colored light to illuminate.
 
     """
     OPTIONS = [
         (['log_group_name'], {'config_save': False}),
         (['log_stream_name'], {'config_save': False}),
         (['regex'], {'config_save': False}),
-        (['--max-value', '-m'], {'type': int, 'config_save': False}),
+        (['--max-value', '-m'],
+         {'type': int, 'config_save': False,
+          'help': ('if provided, the extracted value will be divided by'
+                   'this fixed value')}),
         (['--red-regex', '-R'], {}),
         (['--green-regex', '-G'], {}),
         (['--blue-regex', '-B'], {}),

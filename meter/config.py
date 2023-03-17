@@ -54,13 +54,29 @@ class DefaultArgumentParser(argparse.ArgumentParser):
                 CONFIG[self.source][k] = str(v)
         write_config()
     
-    def parse_args(self, *args, **kwargs):
-        options = super().parse_args(*args, **kwargs)
+    def parse_args(self, args=None, namespace=None):
+        options = super().parse_args(args, namespace)
         self._update_config(options)
         return options
 
-    def parse_known_args(self, *args, **kwargs):
-        options, remaining = super().parse_known_args(*args, **kwargs)
+    def parse_known_args(self, args=None, namespace=None):
+        if namespace is None:
+            namespace = argparse.Namespace()
+        self._namespace = namespace
+        options, remaining = super().parse_known_args(args, namespace)
         self._update_config(options)
         return options, remaining
     
+    def print_help(self, file=None):
+        if hasattr(self, '_namespace') and hasattr(self._namespace, 'source'):
+            try:
+                from meter import sources
+                source_type = getattr(sources, self._namespace.source)
+            except AttributeError:
+                print(f'NOTE: source {self._namespace.source} not found')
+                return
+
+            source_type(['--help'])
+        else:
+            super().print_help(file)
+            

@@ -6,11 +6,23 @@ from meter.sources.base import BaseSource
 
 class OctoPrint(BaseSource):
     """OctoPrint current print status
+
+    You will need to get an API key, documentation:
+    https://docs.octoprint.org/en/master/api/general.html
+
+    The red light illuminates whenever the printer is not printing.
+    The green light comes on when the printer is idle. The blue light
+    illuminates when the printer is paused (no progress has been made
+    recently).
+
     """
     OPTIONS = [
         (['--hostname'], {"required": True}),
         (['--api-key'], {"required": True}),
-        (['--by-time'], {"action": "store_true"}),
+        (['--by-time'],
+         {"action": "store_true",
+          'help': ('Compute progress by time rather than by'
+                   ' the default (fraction of file transmitted)')}),
     ]
 
     def init(self):
@@ -24,7 +36,9 @@ class OctoPrint(BaseSource):
             print_time = job['progress'].get('printTime')
             print_time_left = job['progress'].get('printTimeLeft')
             if print_time is not None and print_time_left is not None:
-                completion = (print_time / (print_time + print_time_left)) * 100.0
+                completion = (
+                    print_time / (print_time + print_time_left)
+                ) * 100.0
             else:
                 completion = 0
             self.log(f"{job['state']} {completion:.1f}%")

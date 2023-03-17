@@ -13,11 +13,9 @@ def print_sources():
         try:
             if not issubclass(v, sources.base.BaseSource):
                 continue
-            doc = v.__doc__ or ""
-            try:
-                first_line = doc.strip().splitlines()[0]
-                print(k, '--', first_line)
-            except IndexError:
+            if v.description:
+                print(k, '--', v.description())
+            else:
                 print(k)
         except TypeError:
             pass

@@ -17,9 +17,12 @@ COMMAND = [
 
 class Meetings(BaseSource):
     """Meeting countdown timer
+
+    Requires icalBuddy to be installed (https://hasseg.org/icalBuddy/).
+
     """
     OPTIONS = [
-        (['--calendar'], {"required": True}),
+        (['--calendar'], {"required": True, 'help': 'Calendar name'}),
     ]
 
     def init(self):
