@@ -68,7 +68,8 @@ class DefaultArgumentParser(argparse.ArgumentParser):
         return options, remaining
     
     def print_help(self, file=None):
-        if hasattr(self, '_namespace') and hasattr(self._namespace, 'source'):
+        if (hasattr(self, '_namespace') and hasattr(self._namespace, 'source')
+            and self._namespace.source is not None):
             try:
                 from meter import sources
                 source_type = getattr(sources, self._namespace.source)

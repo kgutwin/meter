@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 
 from meter.sources.base import BaseSource
 
@@ -39,4 +40,37 @@ class Pomodoro(BaseSource):
         return {
             'meter': meter_val,
             'green': 50 if self.phase == 'break' else 0
+        }
+
+
+class CountdownTimer(BaseSource):
+    """Countdown timer
+    """
+    OPTIONS = [
+        (['end_time'], {'type': str}),
+        (['--duration'], {'action': 'store_true', 'config_save': False,
+                          'help': 'time is duration, not end time'}),
+    ]
+
+    def init(self):
+        self.start_time = datetime.now()
+        if self.opts.duration:
+            self.end_time = datetime.now() + (
+                datetime.strptime(self.opts.end_time, '%H:%M') -
+                datetime.strptime('0:00', '%H:%M')
+            )
+        else:
+            self.end_time = datetime.combine(
+                datetime.now().date(),
+                datetime.strptime(self.opts.end_time, '%H:%M').time()
+            )
+        self.expected_duration = (self.end_time - self.start_time).total_seconds()
+
+    def update(self, reported):
+        meter_val = ((self.end_time - datetime.now()).total_seconds() / self.expected_duration) * 100
+        meter_val = max(0, meter_val)
+
+        return {
+            'meter': meter_val,
+            'red': 100 - (meter_val * 10) if meter_val <= 10 else 0
         }
