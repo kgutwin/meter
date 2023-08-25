@@ -6,3 +6,4 @@ from meter.sources.aws_cloudwatch import CloudWatchAlarm, CloudWatchLogs
 from meter.sources.timers import Pomodoro, CountdownTimer
 from meter.sources.meetings import Meetings
 from meter.sources.traeger import Traeger
+from meter.sources.apcupsd import ApcUps
