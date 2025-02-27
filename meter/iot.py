@@ -133,7 +133,7 @@ class Meter:
             )
             
     def loop(self, source):
-        cycler = DelayCycler(self.min_cycle)
+        cycler = DelayCycler(max(self.min_cycle, source.min_cycle))
         while cycler.cycle():
             self.refresh_credentials()
             response = self.iot.get_thing_shadow(thingName=self.thing)

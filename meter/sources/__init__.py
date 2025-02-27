@@ -7,3 +7,5 @@ from meter.sources.timers import Pomodoro, CountdownTimer
 from meter.sources.meetings import Meetings
 from meter.sources.traeger import Traeger
 from meter.sources.apcupsd import ApcUps
+from meter.sources.acheater import ACHeater
+from meter.sources.kia_connect import KiaConnect

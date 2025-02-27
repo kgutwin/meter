@@ -7,6 +7,7 @@ class InsideTemp(BaseSource):
     """
 
     def update(self, reported):
+        self.log(f'Temp: {c_to_f(reported["temp"])}')
         return {
             'meter': c_to_f(reported['temp'])
         }
